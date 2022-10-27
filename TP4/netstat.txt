@@ -1,0 +1,22 @@
+PS C:\WINDOWS\system32> netstat -b -p tcp
+
+Connexions actives
+
+  Proto  Adresse locale         Adresse distante       État
+
+[Discord.exe]
+  TCP    192.168.1.16:59844     162.159.136.234:https  ESTABLISHED
+
+[Steam.exe]
+  TCP    192.168.1.16:50955     185.25.182.77:27022    ESTABLISHED
+
+[Teams.exe]
+  TCP    192.168.1.16:51074     52.113.199.174:https   ESTABLISHED
+
+[RazerCentralService.exe]
+  TCP    192.168.1.16:51350     ec2-3-225-123-44:https  TIME_WAIT
+  TCP    192.168.1.16:51351     185.25.182.76:27017    TIME_WAIT
+  TCP    192.168.1.16:51352     a23-33-27-83:https     ESTABLISHED
+
+ [EpicGamesLauncher.exe]
+  TCP    192.168.1.16:50955     54.175.230.103:53620    ESTABLISHED

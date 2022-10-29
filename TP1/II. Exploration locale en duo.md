@@ -79,42 +79,7 @@ afficher les paramètres réseaux avancées
     internet n'est plus dispo car changer le routeur ne retrouve plus l'adresse ip initial.
     le réseau est sécurisé et le routeur n'autorise pas adresses ip étrangères
   
----
-
-- **NOTE :** si vous utilisez la même IP que quelqu'un d'autre, il se passerait la même chose qu'en vrai avec des adresses postales :
-  - deux personnes habitent au même numéro dans la même rue, mais dans deux maisons différentes
-  - quand une de ces personnes envoie un message, aucun problème, l'adresse du destinataire est unique, la lettre sera reçue
-  - par contre, pour envoyer un message à l'une de ces deux personnes, le facteur sera dans l'impossibilité de savoir dans quelle boîte aux lettres il doit poser le message
-  - ça marche à l'aller, mais pas au retour
-
-# II. Exploration locale en duo
-
-Owkay. Vous savez à ce stade :
-
-- afficher les informations IP de votre machine
-- modifier les informations IP de votre machine
-- c'est un premier pas vers la maîtrise de votre outil de travail
-
-On va maintenant répéter un peu ces opérations, mais en créant un réseau local de toutes pièces : entre deux PCs connectés avec un câble RJ45.
-
-## 1. Prérequis
-
-- deux PCs avec ports RJ45
-- un câble RJ45
-- **firewalls désactivés** sur les deux PCs
-
-## 2. Câblage
-
-Ok c'est la partie tendue. Prenez un câble. Branchez-le des deux côtés. **Bap.**
-
-## Création du réseau (oupa)
-
-Cette étape pourrait paraître cruciale. En réalité, elle n'existe pas à proprement parlé. On ne peut pas "créer" un réseau.
-
-**Si une machine possède une carte réseau, et si cette carte réseau porte une adresse IP**, alors cette adresse IP se trouve dans un réseau (l'adresse de réseau). Ainsi, **le réseau existe. De fait.**  
-
-**Donc il suffit juste de définir une adresse IP sur une carte réseau pour que le réseau existe ! Bap.**
-
+--
 ## 3. Modification d'adresse IP
 
 🌞 **Modifiez l'IP des deux machines pour qu'elles soient dans le même réseau**
@@ -433,35 +398,6 @@ Un peu austère aux premiers abords, une manipulation très basique permet d'avo
  ![](https://i.imgur.com/nl7XqdA.png)
 - prenez moi des screens des trames en question
 - on va prendre l'habitude d'utiliser Wireshark souvent dans les cours, pour visualiser ce qu'il se passe
-
-# Bilan
-
-**Vu pendant le TP :**
-
-- visualisation de vos interfaces réseau (en GUI et en CLI)
-- extraction des informations IP
-  - adresse IP et masque
-  - calcul autour de IP : adresse de réseau, etc.
-- connaissances autour de/aperçu de :
-  - un outil de diagnostic simple : `ping`
-  - un outil de scan réseau : `nmap`
-  - un outil qui permet d'établir des connexions "simples" (on y reviendra) : `netcat`
-  - un outil pour faire des requêtes DNS : `nslookup` ou `dig`
-  - un outil d'analyse de trafic : `wireshark`
-- manipulation simple de vos firewalls
-
-**Conclusion :**
-
-- Pour permettre à un ordinateur d'être connecté en réseau, il lui faut **une liaison physique** (par câble ou par *WiFi*).  
-- Pour réceptionner ce lien physique, l'ordinateur a besoin d'**une carte réseau**. La carte réseau porte une adresse MAC  
-- **Pour être membre d'un réseau particulier, une carte réseau peut porter une adresse IP.**
-Si deux ordinateurs reliés physiquement possèdent une adresse IP dans le même réseau, alors ils peuvent communiquer.  
-- **Un ordintateur qui possède plusieurs cartes réseau** peut réceptionner du trafic sur l'une d'entre elles, et le balancer sur l'autre, servant ainsi de "pivot". Cet ordinateur **est appelé routeur**.
-- Il existe dans la plupart des réseaux, certains équipements ayant un rôle particulier :
-  - un équipement appelé *passerelle*. C'est un routeur, et il nous permet de sortir du réseau actuel, pour en joindre un autre, comme Internet par exemple
-  - un équipement qui agit comme **serveur DNS** : il nous permet de connaître les IP derrière des noms de domaine
-  - un équipement qui agit comme **serveur DHCP** : il donne automatiquement des IP aux clients qui rejoigne le réseau
-  - **chez vous, c'est votre Box qui fait les trois :)**
 
 
 

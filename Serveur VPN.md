@@ -14,7 +14,7 @@ L'idée globale est la suivante :
 # I. Setup machine distante
 
 
-## 2. Serveur SSH
+## 1. Serveur SSH
 
 ### A. Connexion par clé
 
@@ -25,20 +25,13 @@ L'idée globale est la suivante :
 $ ssh-keygen -t rsa -b 4096
 ```
 
-> Vraiment, faitez-le sinon vous bloquerez votre propre accès à l'étape suivante.
-
-### B. SSH Server Hardening
-
-Je vais pas ré-écrire la roue, y'a 10000 articles pour faire ça sur le web. Je vous link [**un fichier de conf**](https://gist.github.com/cig0/d769b26c5f8a79fbd2ff0e635ebe0846) qui contient les clauses importantes à changer dans votre fichier de conf.
-
-> Vous pouvez google "ssh server hardening" et/ou me demander pour + de clarté.
-
 # II. Serveur VPN
 add rights to user:
 in root mode
 >sudo su
 >usermod -aG wheel rocky
 
+## Step 1 — Installing WireGuard and Generating a Key Pair
 extra software to join the wiregard repositories:
 >sudo dnf install elrepo-release epel-release
 
@@ -53,7 +46,7 @@ Change permissions:
 
 create the corresponding public key:
 >sudo cat /etc/wireguard/private.key | wg pubkey | sudo tee /etc/wireguard/public.key
-
+## Step 2/3 — Choosing IPv4 and Creating a WireGuard Server Configuration
 Change Ipv4:
 >[rocky@vps-5c2e15b5 ~]$ sudo nano wg0.conf
 
@@ -64,6 +57,7 @@ Address = 10.8.0.1/24
 ListenPort = 51820
 SaveConfig = true
 
+## Step 4 — Adjusting the WireGuard Server’s Network Configuration
 Access internet through peer in the wireguard server:
 
 >sudo nano /etc/sysctl.conf
@@ -73,6 +67,7 @@ confirm:
 >sudo sysctl -p
 net.ipv4.ip_forward = 1
 
+## Step 5 — Configuring the WireGuard Server’s Firewall
 Add Firewall UDP Port :
 >sudo firewall-cmd --zone=public --add-port=51820/udp --permanent
 
@@ -82,7 +77,7 @@ Autorize to connect other devices in the network:
 Autorize to rewrite traffic in the internal interface:
 >sudo firewall-cmd --zone=public --add-rich-rule='rule family=ipv4 source address=10.8.0.0/24 masquerade' --permanent
 
-Firewall reloading:
+Firewall reload:
 >sudo firewall-cmd --reload
 
 Verify Firewall Settings:
@@ -107,11 +102,13 @@ Verify Firewall Authorized Interface:
 >[rocky@vps-5c2e15b5 etc]$ sudo firewall-cmd --zone=internal --list-interfaces
 wg0
 
+## Step 6 — Starting the WireGuard Server
+
 Enable Connection to VPN as long as the server:
 
 >sudo systemctl enable wg-quick@wg0.service
 
-verify VPN Status:
+verify VPN Status: sudo systemctl status wg-quick@wg0.service
 > wg-quick@wg0.service - WireGuard via wg-quick(8) for wg0
    Loaded: loaded (/usr/lib/systemd/system/wg-quick@.service; enabled; vendor preset: disabled)
    Active: active (exited) since Sun 2022-11-20 18:48:44 UTC; 10min ago
@@ -136,19 +133,20 @@ verify VPN Status:
 
 >Nov 20 18:48:44 vps-5c2e15b5.vps.ovh.net systemd[1]: Started WireGuard via wg-quick(8) for wg0.
 
+## Step 7 — Configuring a WireGuard Peer
 run Wireguard.exe on windows10 and let generate automatically a pair of keys wg
 
 Config wg0 on the Peer Machine:
 >[Interface]
-PrivateKey = base64_encoded_peer_private_key_goes_here
+PrivateKey = QHMxCmG8TkI6s3nNZsBURcoJ8MK+L2kNCxQh4SCI6Gs=
 Address = 10.8.0.2/24
 
-
 >[Peer]
-PublicKey = base64_encoded_server_public_key_goes_here
+PublicKey = UC0G2O71ZoO4OJTRZUJkyNb0d7hxt64jMws/WIuvSwA=
 AllowedIPs = 10.8.0.0/24
 Endpoint = 51.195.136.139:51820
 
+## Step 8 — Adding the Peer’s Public Key to the WireGuard Server
 Adding the Peer pub key: 
 >sudo wg set wg0 peer 7dcWBG7w2/jwhepvpCH0a8rKUcv7uCCco1S81cDtCiI= allowed-ips 10.8.0.2
 
@@ -164,7 +162,7 @@ interface: wg0
 >peer: 7dcWBG7w2/jwhepvpCH0a8rKUcv7uCCco1S81cDtCiI=
  allowed ips: 10.8.0.2/32
 
-
+## Step 9 — Connecting the WireGuard Peer to the Tunnel
 
 Activate peer tunnel on windows using "activate" button
 
@@ -196,4 +194,5 @@ Check Tunnel Status on Server:
 
 # III. Rendu attendu
 
-- un fichier que je peux utiliser pour me connecter à votre VPN
+- un fichier que je peux utiliser pour me connecter à votre VPN: 
+->wg0.conf dans le repo a importer dans les parametres vpn
